@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
+tr,td,form {
+  border: 2px solid royalblue;
+}
+
+table, tr, td {
+  width: 100%;
+}
+
+.absolute-frame {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.main-frame {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.main-frame > * {
+  position: relative;
+}
+
+.header-row {
+  height: fit-content;
+  width: 100%;
+}
+
+.header-content-panel {
+  background-color: #85c2ff;
+  font-family: Sans, cursive;
+}
+
+.student-info-panel td {
+  padding: 5px;
+}
+
+.content-row {
+}
+
+.footer-row {
+  height: fit-content;
+}
+
+.left-side-panel-box {
+  width: 40%;
+  padding: 0;
+}
+
+.plot-image-block {
+  width: 30%;
+}
+
+.result-table-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.result-table {
+  float: top;
+  margin: 0;
+}
+
+td.left-side-panel-box {
+
+}
+
+td.left-side-panel {
+  float: top;
+  height: 256px;
+}
