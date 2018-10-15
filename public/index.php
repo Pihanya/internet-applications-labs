@@ -2,23 +2,23 @@
 
 function isFloat($val)
 {
-    return true;
+    return is_numeric($val) || is_float($val);
 }
 
 function toFloat(String $num)
 {
+    $sign     = $num[0] == '-' ? -1 : 1;
     $dotPos   = strrpos($num, '.');
     $commaPos = strrpos($num, ',');
     $sep      = (($dotPos > $commaPos) && $dotPos)
         ? $dotPos
-        :
-        ((($commaPos > $dotPos) && $commaPos) ? $commaPos : false);
+        : ((($commaPos > $dotPos) && $commaPos) ? $commaPos : false);
 
     if ( ! $sep) {
-        return floatval(preg_replace("/[^0-9]/", "", $num));
+        return $sign * floatval(preg_replace("/[^0-9]/", "", $num));
     }
 
-    return floatval(
+    return $sign * floatval(
         preg_replace("/[^0-9]/", "", substr($num, 0, $sep)) . '.' .
         preg_replace("/[^0-9]/", "", substr($num, $sep + 1, strlen($num)))
     );
@@ -43,106 +43,116 @@ function isFloatInArray(float $element, array $array)
 function checker($x, $y, $r)
 {
     if ( ! isFloat($x) || ! isFloat($y) || ! isFloat($r)) {
-        return [$x, $y, $r, false];
+        return (object)array(
+            "success" => false,
+            "x"       => $x,
+            "y"       => $y,
+            "r"       => $r,
+        );
     }
 
     $x = toFLoat($x);
     $y = toFloat($y);
     $r = toFloat($r);
 
-    $checkResult = isFloatInArray($x, [-5, -4, -3, -2, -1, 0, 1, 2, 3])
-        && (($y >= -3 || $y <= 3) || compareFloats($y, 3)
-            || compareFloats(
-                $y, -3
-            ))
-        && isFloatInArray($r, [2, 3, 4, 5]);
+    $checkResult = isFloatInArray($x, [-5, -4, -3, -2, -1, 0, 1, 2, 3]);
 
-    return [$x, $y, $r, $checkResult];
+    $checkResult &= ($y >= -3 || $y <= 3);
+    $checkResult |= (compareFloats($y, 3) || compareFloats($y, -3));
+
+    $checkResult &= isFloatInArray($r, [2, 3, 4, 5]);
+
+    return (object)array(
+        "success" => $checkResult,
+        "x"       => $x,
+        "y"       => $y,
+        "r"       => $r,
+    );
 }
-
 
 function validator($x, $y, $r)
 {
-    if (compareFloats($x, 0) && compareFloats($y, 0)) {
+    $sign_x = bccomp($x, 0);
+    $sign_y = bccomp($y, 0);
+    $sign_r = bccomp($r, 0);
+
+    if ($sign_r === 0) {
+        return false;
+    } elseif ($sign_x === 0 && $sign_y === 0) {
         return true;
-    } elseif (compareFloats($x, 0)) {
-        return $y + ($r / 2) + PHP_FLOAT_EPSILON >= 0
-            && $y - $r + PHP_FLOAT_EPSILON >= 0;
-    } elseif (compareFloats($y, 0)) {
-        return $x + $r + PHP_FLOAT_EPSILON >= 0 && $x - $r + PHP_FLOAT_EPSILON;
+    } elseif ($sign_x === 0) {
+        return bccomp($y, bcmul($r, -0.5)) >= 0 && bccomp($y, $r) <= 0;
+    } elseif ($sign_y === 0) {
+        return bccomp($x, bcmul($r, -1)) >= 0;
     }
 
-    if ($x > 0 && $y > 0) {
-        return sqrt($x * $x + $y * $y) <= $r;
-    } elseif ($x > 0 && $y < 0) {
-        return $y - ($x - $r) / 2 >= 0;
-    } elseif ($x < 0 && $y < 0) {
-        return ($y + PHP_FLOAT_EPSILON >= -$r / 2)
-            && ($x + PHP_FLOAT_EPSILON >= -$r);
+    if ($sign_x === 1 && $sign_y === 1) {
+        return bccomp(bcadd(bcpow($x, 2), bcpow($y, 2)), bcpow($r, 2)) <= 0;
+    } elseif ($sign_x == 1 && $sign_y === -1) {
+        return bccomp($y, bcdiv(bcsub($r, $x), 2)) >= 0;
+    } elseif ($sign_x === -1 && $sign_y === -1) {
+        return bccomp($y, bcmul($r, -0.5)) >= 0
+            && bccomp($x, bcmul($r, -1)) >= 0;
+    } elseif ($sign_x === -1 && $sign_y === 1) {
+        return false;
     } else {
         return false;
     }
 }
 
-$beforeMicros = microtime(true);
-$beginDate    = date("d/m H:i:s");
+function script($x, $y, $r)
+{
+    $checkResult = checker($x, $y, $r);
 
-session_start();
+    $checkSuccess = $checkResult->success;
+    $x            = $checkResult->x;
+    $y            = $checkResult->y;
+    $r            = $checkResult->r;
 
+    echo "<script>alert($x + \" \" + $y + \" \" + $r);</script>";
 
-$validationResult = false;
-$x                = 0.0;
-$y                = 0.0;
-$r                = 0.0;
+    $validationSuccess = validator($x, $y, $r);
 
-if (isset($_POST["x"]) && isset($_POST["y"]) && isset($_POST["r"])) {
-    $x = $_POST["x"];
-    $y = $_POST["y"];
-    $r = $_POST["r"];
-
-    [$x, $y, $r, $checked] = checker($x, $y, $r);
-
-    if ($checked) {
-        http_response_code(200);
-    } else {
-        http_response_code(400);
-
-        return;
-    }
-
-    echo "<script>
-                alert($x + \" \" + $y + \" \" + $r);
-          </script>";
-
-    $validationResult = validator($x, $y, $r);
+    return (object)array(
+        "success" => $checkSuccess,
+        "isValid" => $validationSuccess,
+        "x"       => $x,
+        "y"       => $y,
+        "r"       => $r,
+    );
 }
 
-$verdict       = $validationResult ? "Yes" : "No";
-$afterMicros   = microtime(true);
-$executionTime = ($afterMicros - $beforeMicros) * 1000;
+session_start();
 
 if ( ! isset($_SESSION["table"])) {
     $_SESSION["table"] = [];
 }
 
+$beforeMicros = microtime(true);
+$beginDate    = date("d/m H:i:s");
 
-if ($validationResult) {
-    array_push(
-        $_SESSION["table"],
-        [
-            $x,
-            $y,
-            $r,
-            $executionTime,
-            $beginDate,
-            $verdict,
-        ]
-    );
+if (isset($_POST["x"]) && isset($_POST["y"]) && isset($_POST["r"])) {
+    $res = script($_POST["x"], $_POST["y"], $_POST["r"]);
+
+    if ($res->success) {
+        http_response_code(200);
+        $afterMicros = microtime(true);
+
+        array_push(
+            $_SESSION["table"],
+            [
+                $res->x,
+                $res->y,
+                $res->r,
+                round(($afterMicros - $beforeMicros) * 1000, 3),
+                $beginDate,
+                $res->isValid ? "Yes" : "No",
+            ]
+        );
+    } else {
+        http_response_code(400);
+    }
 }
-
-
-//$POST["time"]     = $beginDate;
-//$_SESSION["time"] = $beginDate;
 ?>
 
 <!DOCTYPE HTML>
@@ -152,7 +162,7 @@ if ($validationResult) {
     <meta charset="UTF-8">
     <meta name="author" content="Mikhail Gostev">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Две колонки</title>
+    <title>Лабораторная работа №1</title>
 
     <link href="styles/styles.css" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Oleo+Script'
@@ -163,8 +173,9 @@ if ($validationResult) {
 
     <!--<script type="application/javascript" src="./js/bootstrap.js"></script>-->
     <!--    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="handle_functions.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="./js/validator.js"></script>
 </head>
 <body>
 <table class="absolute-frame main-frame">
@@ -242,12 +253,10 @@ if ($validationResult) {
                                                         координат</h1>
 
                                                     <form id="form"
-                                                          onsubmit="return handlePoint()"
+                                                          onsubmit="return handleForm()"
                                                           class="data-form"
                                                           action="index.php"
                                                           method="POST">
-                                                        <!--                                                          onsubmit="handlePoint()"-->
-                                                        <!--action="../src/controller/PlotController.php"-->
                                                         <table class="data-form-content-box">
                                                             <tr>
                                                                 <td class="input-box">
@@ -470,7 +479,7 @@ if ($validationResult) {
                                                     <th>X
                                                     <th>Y
                                                     <th>R
-                                                    <th>Время выполнения, ms
+                                                    <th>Время выполнения, nsecs
                                                     <th>Время
                                                     <th>Вердикт
                                                 </tr>
@@ -478,7 +487,6 @@ if ($validationResult) {
                                                 <?php
                                                 $table = $_SESSION["table"];
                                                 foreach ($table as $row) {
-//													echo "<tr>\n";
 
                                                     $x             = $row[0];
                                                     $y             = $row[1];
@@ -496,31 +504,14 @@ if ($validationResult) {
                                                             <td>$verdict</td>
                                                          </tr>";
                                                 }
-
                                                 ?>
                                             </table>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
-
-                            <!--<tr>
-                                <td>
-                                    <div class="content-panel">
-                                        <h1 class="header">Текущее время</h1>
-
-                                        <div class="large-text">
-                                            Текущее время:
-                                            <div id="time-paragraph">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>-->
                         </table>
                     </td>
-
-
                 </tr>
             </table>
         </td>
