@@ -1,0 +1,7 @@
+{
+  "name": "inet_applications_lab1",
+  "version": "1.0.0",
+  "dependencies": {
+    "axios": "latest"
+  }
+}

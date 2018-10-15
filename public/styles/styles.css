@@ -1,0 +1,429 @@
+* {
+  margin: 0;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+body {
+  max-height: 100%;
+  max-width: 100%;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  background-color: whitesmoke;
+}
+
+td {
+  padding: 0;
+}
+
+.content-row, .footer-row {
+  font-family: 'Roboto', sans-serif;
+}
+
+.content-row {
+  height: 40%;
+}
+
+.absolute-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+
+}
+
+.content-box {
+  vertical-align: top;
+  height: fit-content;
+  padding: 5px 5px;
+}
+
+.main-frame {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-collapcse: collapse;
+}
+
+.main-frame > * {
+  position: relative;
+}
+
+.header-row {
+  height: 80px;
+  width: 100%;
+}
+
+.header-content-panel {
+  width: 100%;
+  background-color: #6170ea;
+  text-decoration-color: black;
+  font-family: Sans, cursive;
+  font-size: 18px
+}
+
+.header-content-box {
+  vertical-align: bottom;
+}
+
+.student-info-panel {
+  /*display: block;*/
+  width: 100%;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  vertical-align: middle;
+  text-align: right;
+}
+
+.student-info-panel tr {
+  width: 100%;
+  text-align: right;
+  padding: 5px;
+}
+
+.task-row > td {
+  padding: 0;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  display: block;
+  margin: 10px 0;
+}
+
+.content-panel {
+  border-collapse: collapse;
+  padding: 0;
+  position: relative;
+  background-color: white;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  margin: 10px 5px;
+}
+
+/** Panel title **/
+.content-panel .header {
+  top: 0;
+  left: 0;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #9fa8da;
+  padding-top: 20px;
+  width: 100%;
+
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+
+.content-panel .header::after {
+  content: " ";
+  display: block;
+  height: 10px;
+  background-color: #9fa8da;
+  width: 100%;
+
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+}
+
+.section-end::after {
+  content: " ";
+  width: 400px;
+  display: block;
+  margin: 16px auto 32px;
+  border-bottom: 2px solid #232323;
+}
+
+.footer-row {
+  height: 30px;
+  margin: 0;
+  background-color: #6170ea;
+}
+
+.footer-box {
+  padding: 5px 0;
+}
+
+.footer-box {
+  text-align: center;
+}
+
+.left-side-panel-box {
+  width: 50%;
+  min-width: 725px;
+  max-width: 100%;
+  vertical-align: top;
+}
+
+.left-side-panel-box table {
+  width: 100%;
+}
+
+.upper-side-box tr {
+  width: 100%;
+}
+
+.upper-side-box td {
+  width: 100%;
+}
+
+.content-container {
+  min-height: 50%;
+  max-height: 80%;
+  height: 40%;
+  width: 100%;
+}
+
+.logo-box {
+  height: 128px;
+  width: 128px;
+  padding: 0;
+  margin: 0;
+}
+
+.right-side-panel-box {
+  min-width: 320px;
+  width: 50%;
+  position: relative;
+  text-align: left;
+  vertical-align: top;
+  height: fit-content;
+  padding: 0;
+}
+
+.right-side-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.plot-image-block {
+  width: 30%;
+}
+
+.plot-image-container {
+  width: 100%;
+  text-align: center;
+  min-height: 325px;
+  min-width: 325px;
+}
+
+.result-table-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+}
+
+.right-side-panel-box tr {
+  height: 100%;
+  vertical-align: top;
+}
+
+.result-table-row {
+  padding: 0;
+}
+
+.result-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  /*display: inline-block;*/
+  /*border: 2px solid #6f79a8;*/
+  width: 95%;
+}
+
+.result-table-container {
+  padding: 20px 10px;
+}
+
+.result-table tr:last-child /*:first-child*/
+{
+  padding: 0;
+  height: 30px;
+  /*width: 31.666%;*/
+  /*border-bottom: 2px solid #324989;*/
+  border-bottom: none;
+}
+
+.result-table tr /*:first-child*/
+{
+  padding: 0;
+  height: 30px;
+  /*width: 31.666%;*/
+  /*border-bottom: 2px solid #324989;*/
+  border-bottom: 2px solid #6f79a8;
+}
+
+.result-table tr > * {
+  min-width: 50px;
+  vertical-align: middle;
+  padding: 2px;
+  text-align: center;
+  /*border-right: 2px solid #324989;*/
+}
+
+.large-text {
+  font-size: 26px;
+  padding: 20px;
+}
+
+.text {
+  font-size: 14px;
+  padding-left: 10px;
+  padding-top: 20px;
+}
+
+.text, .large-text  p {
+  margin-bottom: 20px;
+}
+
+.data-form-row {
+  width: 100%;
+}
+
+.data-form-box td {
+  position: relative;
+  width: fit-content;
+}
+
+.data-form {
+  /*position: absolute;*/
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.submit-button {
+  display: block;
+  margin: 10px auto;
+  text-align: center;
+  height: 40px;
+  width: 150px;
+  background-color: white;
+  color: black;
+  border: 2px solid #9fa8da; /* Green */
+}
+
+.submit-button:hover {
+  background-color: #9fa8da; /* Green */
+  color: white;
+}
+
+.input-box {
+  padding: 0 10px;
+}
+
+.centred-input-box {
+  display: block;
+  width: fit-content;
+  position: center;
+}
+
+.input-element-box {
+  padding: 0;
+  margin: 0;
+}
+
+/* Customize the label (the container) */
+.radio-box-label {
+  display: block;
+  width: 30px;
+  position: relative;
+  padding-top: 4px;
+  padding-left: 20px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.radio-box {
+  height: fit-content;
+}
+
+.radio-box-label {
+  height: fit-content;
+}
+
+/* Hide the browser's default radio button */
+.radio-box-label input {
+  position: absolute;
+  opacity: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+  /*cursor: pointer;*/
+}
+
+/* On mouse-over, add a grey background color */
+.radio-box-label:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio-box-label input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio-box-label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.checkmark:after {
+  top: 5px;
+  left: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: white;
+}
+
+@media (max-device-width: 500px) {
+  .right-side-panel-box {
+    display: none;
+    /*display: none;*/
+  }
+}
+
+@-webkit-keyframes appear {
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes appear {
+  100% {
+    opacity: 1;
+  }
+}
