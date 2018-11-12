@@ -1,9 +1,5 @@
 <?php
 
-function isFloat($val)
-{
-    return is_numeric($val) || is_float($val);
-}
 
 function toFloat(String $num)
 {
@@ -42,7 +38,7 @@ function isFloatInArray(float $element, array $array)
 
 function checker($x, $y, $r)
 {
-    if ( ! isFloat($x) || ! isFloat($y) || ! isFloat($r)) {
+    if ( ! is_float($x) || ! is_float($y) || ! is_float($r)) {
         return (object)array(
             "success" => false,
             "x"       => $x,
@@ -108,8 +104,6 @@ function script($x, $y, $r)
     $x            = $checkResult->x;
     $y            = $checkResult->y;
     $r            = $checkResult->r;
-
-    echo "<script>alert($x + \" \" + $y + \" \" + $r);</script>";
 
     $validationSuccess = validator($x, $y, $r);
 
@@ -383,7 +377,9 @@ if (isset($_POST["x"]) && isset($_POST["y"]) && isset($_POST["r"])) {
                                                                 <td class="input-box">
                                                                     <div class="title">
                                                                         Координата
-                                                                        Y
+                                                                        Y (в
+                                                                        промежутке
+                                                                        [-3; 3])
                                                                     </div>
 
                                                                     <input type="text"
